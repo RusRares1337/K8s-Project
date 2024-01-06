@@ -105,7 +105,7 @@
     append: yes
 - name: install Kubelet
   apt:
-    name: kubelet=1.26.*
+    name: kubelet=1.28.*
     state: present
     update_cache: true
 - name: install Kubeadm
