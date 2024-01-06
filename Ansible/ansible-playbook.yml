@@ -7,3 +7,8 @@
   become: yes
   roles:
     - kube_dependencies
+
+- hosts: master
+  become: yes
+  roles:
+    - master

@@ -137,4 +137,3 @@
     line: "Environment=\"KUBELET_EXTRA_ARGS= --runtime-cgroups=/system.slice/containerd.service --container-runtime-endpoint=unix:///run/containerd/containerd.sock\""
     insertafter: '\[Service\]'
   when: check_args.stdout == ""
-
