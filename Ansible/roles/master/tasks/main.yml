@@ -1,8 +1,14 @@
+- name: install Kubectl
+  apt:
+    name: kubectl=1.26.*
+    state: present
+    force: yes # allow downgrades
+
 - name: create an empty file for Kubeadm configuring
   copy:
     content: ""
     dest: /etc/kubernetes/kubeadm-config.yaml
-    force: n
+    force: no
 - name: configuring the container runtime including its cgroup driver
   blockinfile:
     path: /etc/kubernetes/kubeadm-config.yaml
@@ -35,13 +41,13 @@
   file:
     path: $HOME/.kube
     state: directory
-    mode: 075
+    mode: 0755
 - name: copy admin.conf to user's kube config
   copy:
     src: /etc/kubernetes/admin.conf
     dest: /home/adminuser/.kube/config
     remote_src: yes
-    owner: adminuse
+    owner: adminuser
 - name: install Pod network
   become: yes
   become_user: adminuser

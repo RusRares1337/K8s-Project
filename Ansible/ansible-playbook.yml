@@ -12,8 +12,3 @@
   become: yes
   roles:
     - master
-
-- hosts: workers
-  become: yes
-  roles:
-   - workers
