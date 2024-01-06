@@ -1,0 +1,9 @@
+[master]
+23.97.169.174 ansible_user=adminuser
+
+[workers]
+23.97.169.55 ansible_user=adminuser
+23.97.174.236 ansible_user=adminuser
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3
