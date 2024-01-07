@@ -18,4 +18,8 @@ To allow target server to communicate with host server, target server has to hav
 ```shell
 ssh-copy-id root@<ip> 
 ```
-3.
+
+3. Run ansible playbook
+```shell
+ansible-playbook ansible-playbook.yml
+```
