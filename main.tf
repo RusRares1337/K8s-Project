@@ -140,9 +140,9 @@ resource "azurerm_network_interface" "nic3" {
   ]
 }
 
-# Create network security group
-resource "azurerm_network_security_group" "nsg" {
-  name                = "nsg-01"
+# Create network security group for master-node
+resource "azurerm_network_security_group" "nsg_master" {
+  name                = "master-nsg"
   location            = data.azurerm_resource_group.rg.location
   resource_group_name = data.azurerm_resource_group.rg.name
 
@@ -181,31 +181,97 @@ resource "azurerm_network_security_group" "nsg" {
   }
 
   security_rule {
-    name                       = "port_icmp"
+    name                       = "k8s-api-server"
     priority                   = 130
     direction                  = "Inbound"
     access                     = "Allow"
-    protocol                   = "Icmp"
+    protocol                   = "Tcp"
     source_port_range          = "*"
-    destination_port_range     = "*"
+    destination_port_range     = "6443"
     source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+ security_rule {
+    name                       = "etcd-server-client-api"
+    priority                   = 140
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "2379-2380"
+    source_address_prefix      = "10.0.0.0/16"
+    destination_address_prefix = "*"
+  }
+
+ security_rule {
+    name                       = "api-scheduler-controller"
+    priority                   = 150
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "10250-10252"
+    source_address_prefix      = "10.0.0.0/16"
     destination_address_prefix = "*"
   }
 }
 
+# Create network security group for worker-node
+resource "azurerm_network_security_group" "nsg_workers" {
+  name                = "workers-nsg"
+  location            = data.azurerm_resource_group.rg.location
+  resource_group_name = data.azurerm_resource_group.rg.name
+
+  security_rule {
+    name                       = "allow_ssh"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "kubelet-API"
+    priority                   = 110
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "10250"
+    source_address_prefix      = "10.0.0.0/16"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "NodePortServices"
+    priority                   = 120
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "30000-32767"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+}
 resource "azurerm_network_interface_security_group_association" "association1" {
   network_interface_id      = azurerm_network_interface.nic1.id
-  network_security_group_id = azurerm_network_security_group.nsg.id
+  network_security_group_id = azurerm_network_security_group.nsg_master.id
 }
 
 resource "azurerm_network_interface_security_group_association" "association2" {
   network_interface_id      = azurerm_network_interface.nic2.id
-  network_security_group_id = azurerm_network_security_group.nsg.id
+  network_security_group_id = azurerm_network_security_group.nsg_workers.id
 }
 
 resource "azurerm_network_interface_security_group_association" "association3" {
   network_interface_id      = azurerm_network_interface.nic3.id
-  network_security_group_id = azurerm_network_security_group.nsg.id
+  network_security_group_id = azurerm_network_security_group.nsg_workers.id
 }
 
 
