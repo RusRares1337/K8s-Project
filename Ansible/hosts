@@ -1,10 +1,10 @@
 [master]
-52.174.19.70 ansible_user=adminuser
+20.234.155.245 ansible_user=adminuser
 
 [workers]
-52.174.19.104 ansible_user=adminuser
-52.174.18.47 ansible_user=adminuser
+20.234.155.215 ansible_user=adminuser
+20.234.155.229 ansible_user=adminuser
 
 
 [all:vars]
-ansible_python_interpreter=/usr/bin/python3
+ansible_python_interpreter=/usr/bin/python3 
