@@ -17,3 +17,13 @@
   become: yes
   roles:
     - workers
+
+- hosts: all
+  tasks:
+    - name: Fetch the file from the master to ansible
+      run_once: yes
+      fetch: src=/etc/kubernetes/admin.conf dest=temp/ flat=yes
+      when: "{{ ansible_hostname == 'master' }}"
+    - name: Copy the file from the ansible to nodes
+      copy: src=temp/admin.conf dest=$HOME/.kube/config
+      when: "{{ ansible_hostname != 'master' }}"
