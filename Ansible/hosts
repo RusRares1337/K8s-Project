@@ -1,9 +1,9 @@
 [master]
-20.234.155.245 ansible_user=adminuser
+40.114.201.65 ansible_user=adminuser
 
 [workers]
-20.234.155.215 ansible_user=adminuser
-20.234.155.229 ansible_user=adminuser
+40.114.206.46 ansible_user=adminuser
+40.114.193.128 ansible_user=adminuser
 
 
 [all:vars]

@@ -18,7 +18,8 @@
   roles:
     - workers
 
-- hosts: all
+- name: Copy content of master .kube config into workers
+  hosts: all
   tasks:
     - name: Fetch the file from the master to ansible
       run_once: yes
@@ -27,3 +28,4 @@
     - name: Copy the file from the ansible to nodes
       copy: src=temp/admin.conf dest=$HOME/.kube/config
       when: "{{ ansible_hostname != 'master' }}"
+

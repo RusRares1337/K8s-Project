@@ -1,9 +1,3 @@
-- name: install Kubectl
-  apt:
-    name: kubectl=1.26.*
-    state: present
-    force: yes # allow downgrades
-
 - name: create an empty file for Kubeadm configuring
   copy:
     content: ""
